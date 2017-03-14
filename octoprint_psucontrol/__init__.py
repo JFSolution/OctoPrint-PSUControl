@@ -114,7 +114,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
         
         GPIO.setwarnings(False)
         #GPIO.cleanup()
-        GPIO.setmode(GPIO.BOARD)
+        GPIO.setmode(GPIO.BCM)
         
         if self.enableSensing:
             self._logger.info("Using sensing to determine PSU on/off state.")
