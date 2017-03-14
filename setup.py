@@ -3,14 +3,14 @@ import setuptools
 
 ########################################################################################################################
 
-plugin_identifier = "psucontrol"
+plugin_identifier = "psucontrol_jfs"
 plugin_package = "octoprint_%s" % plugin_identifier
 plugin_name = "OctoPrint-PSUControl"
-plugin_version = "0.1.3"
+plugin_version = "0.1.4"
 plugin_description = "Control ATX/AUX power supply."
 plugin_author = "Shawn Bruce"
 plugin_author_email = "kantlivelong@gmail.com"
-plugin_url = "https://github.com/kantlivelong/OctoPrint-PSUControl"
+plugin_url = "https://github.com/JFSolution/OctoPrint-PSUControl"
 plugin_license = "AGPLv3"
 plugin_additional_data = []
 
