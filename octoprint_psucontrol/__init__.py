@@ -105,7 +105,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
             self._logger.error("RPi.GPIO version 0.6.0 or greater required.")
         
         GPIO.setwarnings(False)
-        GPIO.cleanup()
+        #GPIO.cleanup()
         GPIO.setmode(GPIO.BOARD)
         
         if self.enableSensing:
@@ -416,7 +416,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
             )
         )
 
-__plugin_name__ = "PSU Control"
+__plugin_name__ = "PSU Control JFS"
 
 def __plugin_load__():
     global __plugin_implementation__
