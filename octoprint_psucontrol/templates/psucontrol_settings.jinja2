@@ -18,6 +18,10 @@
         <div class="controls">
             <input type="text" class="input-mini" data-bind="value: settings.plugins.psucontrol.onoffGPIOPin"> <input type="checkbox" data-bind="checked: settings.plugins.psucontrol.invertonoffGPIOPin"> Invert
         </div>
+        <label class="control-label">On/Off Light Pin</label>
+        <div class="controls">
+            <input type="text" class="input-mini" data-bind="value: settings.plugins.psucontrol.onoffLightPin"> <input type="checkbox" data-bind="checked: settings.plugins.psucontrol.invertonoffLightPin"> Invert
+</div>
     </div>
     <!-- /ko -->
         <!-- ko if: settings.plugins.psucontrol.switchingMethod() === "GCODE" -->
