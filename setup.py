@@ -3,7 +3,7 @@ import setuptools
 
 ########################################################################################################################
 
-plugin_identifier = "psucontrol_jfs"
+plugin_identifier = "psucontrol"
 plugin_package = "octoprint_%s" % plugin_identifier
 plugin_name = "OctoPrint-PSUControl"
 plugin_version = "0.1.5"
