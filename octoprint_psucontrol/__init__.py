@@ -427,17 +427,17 @@ class PSUControl(octoprint.plugin.StartupPlugin,
     def get_update_information(self):
         return dict(
             psucontrol=dict(
-                displayName="PSU Control",
+                displayName="PSU Control JFS",
                 displayVersion=self._plugin_version,
 
                 # version check: github repository
                 type="github_release",
-                user="kantlivelong",
+                user="JFSolution",
                 repo="OctoPrint-PSUControl",
                 current=self._plugin_version,
 
                 # update method: pip w/ dependency links
-                pip="https://github.com/kantlivelong/OctoPrint-PSUControl/archive/{target_version}.zip"
+                pip="https://github.com/JFSolution/OctoPrint-PSUControl/archive/{target_version}.zip"
             )
         )
 
