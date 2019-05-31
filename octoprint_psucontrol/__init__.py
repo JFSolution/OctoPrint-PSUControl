@@ -89,7 +89,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
         self.switchingMethod = ''
         self.onoffGPIOPin = 0
         self.invertonoffGPIOPin = False
-	self.onoffLightPin = 0
+        self.onoffLightPin = 0
         self.invertonoffLightPin = False
         self.onGCodeCommand = ''
         self.offGCodeCommand = ''
@@ -137,7 +137,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
         self.invertonoffGPIOPin = self._settings.get_boolean(["invertonoffGPIOPin"])
         self._logger.debug("invertonoffGPIOPin: %s" % self.invertonoffGPIOPin)
 
-	self.onoffLightPin = self._settings.get_int(["onoffLightPin"])
+        self.onoffLightPin = self._settings.get_int(["onoffLightPin"])
         self._logger.debug("onoffGPIOPin: %s" % self.onoffLightPin)
 
         self.invertonoffLightPin = self._settings.get_boolean(["invertonoffLightPin"])
@@ -225,7 +225,6 @@ class PSUControl(octoprint.plugin.StartupPlugin,
             self._logger.info("Using GPIO for tracking PSU on/off state.")
         elif self.sensingMethod == 'SYSTEM':
             self._logger.info("Using System Commands for tracking PSU on/off state.")
-
         if self.switchingMethod == 'GPIO' or self.sensingMethod == 'GPIO':
             self._configure_gpio()
 
@@ -269,7 +268,6 @@ class PSUControl(octoprint.plugin.StartupPlugin,
         if not self._hasGPIO:
             self._logger.error("RPi.GPIO is required.")
             return
-
         self._logger.info("Running RPi.GPIO version %s" % GPIO.VERSION)
         if GPIO.VERSION < "0.6":
             self._logger.error("RPi.GPIO version 0.6.0 or greater required.")
@@ -371,7 +369,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
                 self.isPSUOn = self._noSensing_isPSUOn
             else:
                 return
-
+            
             self._logger.debug("isPSUOn: %s" % self.isPSUOn)
 
             if (old_isPSUOn != self.isPSUOn) and self.isPSUOn:
@@ -380,7 +378,6 @@ class PSUControl(octoprint.plugin.StartupPlugin,
                 self._stop_idle_timer()
 
             self._plugin_manager.send_plugin_message(self._identifier, dict(hasGPIO=self._hasGPIO, isPSUOn=self.isPSUOn))
-
             self._check_psu_state_event.wait(5)
             self._check_psu_state_event.clear()
 
@@ -572,7 +569,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
                 else:
                     pin_output=GPIO.HIGH
 
-		if not self.invertonoffLightPin:
+                if not self.invertonoffLightPin:
                     pin_output_light=GPIO.LOW
                 else:
                     pin_output_light=GPIO.HIGH
@@ -660,7 +657,7 @@ class PSUControl(octoprint.plugin.StartupPlugin,
         self.switchingMethod = self._settings.get(["switchingMethod"])
         self.onoffGPIOPin = self._settings.get_int(["onoffGPIOPin"])
         self.invertonoffGPIOPin = self._settings.get_boolean(["invertonoffGPIOPin"])
-	self.onoffLightPin = self._settings.get_int(["onoffLightPin"])
+        self.onoffLightPin = self._settings.get_int(["onoffLightPin"])
         self.invertonoffLightPin = self._settings.get_boolean(["invertonoffLightPin"])
         self.onGCodeCommand = self._settings.get(["onGCodeCommand"])
         self.offGCodeCommand = self._settings.get(["offGCodeCommand"])
@@ -753,8 +750,6 @@ class PSUControl(octoprint.plugin.StartupPlugin,
             "js": ["js/psucontrol.js"],
             "less": ["less/psucontrol.less"],
             "css": ["css/psucontrol.min.css"]
-
-        }
 
     def get_update_information(self):
         return dict(

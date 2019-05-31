@@ -2,47 +2,66 @@ $(function() {
     function PSUControlViewModel(parameters) {
         var self = this;
 
-        self.loginState = parameters[0];
-        self.isPSUOn = ko.observable();
-	self.psu_indicator = undefined;
-	self.poweroff_dialog = undefined;
+        self.settingsViewModel = parameters[0]
+        self.loginState = parameters[1];
+        self.settings = undefined;
+        self.hasGPIO = ko.observable(undefined);
+        self.isPSUOn = ko.observable(undefined);
+        self.psu_indicator = $("#psucontrol_indicator");
 
-        self.onStartup = function() {
-            self.poweroff_dialog = $("#psucontrol_poweroff_confirmation_dialog");
-            self.psu_indicator = $("#powercontrol_psu_indicator");
+        self.onBeforeBinding = function() {
+            self.settings = self.settingsViewModel.settings;
         };
+
+        self.onStartup = function () {
+            self.isPSUOn.subscribe(function() {
+                if (self.isPSUOn()) {
+                    self.psu_indicator.removeClass("off").addClass("on");
+                } else {
+                    self.psu_indicator.removeClass("on").addClass("off");
+                }   
+            });
+            
+            $.ajax({
+                url: API_BASEURL + "plugin/psucontrol",
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    command: "getPSUState"
+                }),
+                contentType: "application/json; charset=UTF-8"
+            }).done(function(data) {
+                self.isPSUOn(data.isPSUOn);
+            });
+        }
 
         self.onDataUpdaterPluginMessage = function(plugin, data) {
             if (plugin != "psucontrol") {
                 return;
             }
 
+            self.hasGPIO(data.hasGPIO);
             self.isPSUOn(data.isPSUOn);
-
-            if (self.isPSUOn()) {
-                self.psu_indicator.css('color', '#00FF00');
-            } else {
-                self.psu_indicator.css('color', '#808080');
-            }
-
-            if (self.psu_indicator.css('visibility') == "hidden") {
-                self.psu_indicator.css('visibility', 'visible');
-            }
         };
 
-	self.togglePSU = function() {
+        self.togglePSU = function() {
             if (self.isPSUOn()) {
-                self.showPowerOffDialog();
+                if (self.settings.plugins.psucontrol.enablePowerOffWarningDialog()) {
+                    showConfirmationDialog({
+                        message: "You are about to turn off the PSU.",
+                        onproceed: function() {
+                            self.turnPSUOff();
+                        }
+                    });
+                } else {
+                    self.turnPSUOff();
+                }
             } else {
                 self.turnPSUOn();
             }
         };
 
-	self.showPowerOffDialog = function() {
-            self.poweroff_dialog.modal("show");
-        };
-
-	self.turnPSUOn = function() {
+        self.turnPSUOn = function() {
             $.ajax({
                 url: API_BASEURL + "plugin/psucontrol",
                 type: "POST",
@@ -54,7 +73,7 @@ $(function() {
             })
         };
 
-	self.turnPSUOff = function() {
+    	self.turnPSUOff = function() {
             $.ajax({
                 url: API_BASEURL + "plugin/psucontrol",
                 type: "POST",
@@ -64,14 +83,12 @@ $(function() {
                 }),
                 contentType: "application/json; charset=UTF-8"
             })
-
-            self.poweroff_dialog.modal("hide");
         };   
     }
 
     ADDITIONAL_VIEWMODELS.push([
         PSUControlViewModel,
-        ["loginStateViewModel"],
-        ["#navbar_plugin_psucontrol"]
+        ["settingsViewModel", "loginStateViewModel"],
+        ["#navbar_plugin_psucontrol", "#settings_plugin_psucontrol"]
     ]);
 });
