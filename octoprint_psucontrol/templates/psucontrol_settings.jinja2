@@ -1,5 +1,25 @@
 <form class="form-horizontal">
-
+    <h4>General</h4>
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+            <input type="checkbox" data-bind="checked: settings.plugins.psucontrol.enablePowerOffWarningDialog"> Show warning dialog when powering off via toggle button.
+            </label>
+        </div>
+    </div>
+    <!-- ko if: hasGPIO() && (settings.plugins.psucontrol.switchingMethod() === "GPIO" || settings.plugins.psucontrol.sensingMethod() === "GPIO") -->
+    <div class="control-group">
+        <label class="control-label">GPIO Mode</label>
+        <div class="controls">
+            <select data-bind="value: settings.plugins.psucontrol.GPIOMode">
+                <option value="BOARD">BOARD</option>
+                <option value="BCM">BCM</option>
+            </select>
+            <span class="help-inline">Pin number will be converted if an alternate mode has already been set by another plugin.</span>
+        </div>
+    </div>
+    <!-- /ko -->
+<br />
     <h4>Switching</h4>
     <div class="control-group">
         <label class="control-label">Switching Method</label>
@@ -56,17 +76,36 @@
 
     <h4>Sensing</h4>
     <div class="control-group">
+        <label class="control-label">Sensing Method</label>
         <div class="controls">
-            <label class="checkbox">
-            <input type="checkbox" data-bind="checked: settings.plugins.psucontrol.enableSensing"> Get PSU on/off state via GPIO (Recommended)
-            </label>
+            <select data-bind="value: settings.plugins.psucontrol.sensingMethod">
+                <option value="INTERNAL">Internal</option>
+                <!-- ko if: hasGPIO() -->
+                <option value="GPIO">GPIO Pin</option>
+                <!-- /ko -->
+                <option value="SYSTEM">System Command</option>
+            </select>
         </div>
     </div>
-    <!-- ko if: settings.plugins.psucontrol.enableSensing() -->
+    <!-- ko if: settings.plugins.psucontrol.sensingMethod() === "GPIO" -->
     <div class="control-group">
-        <label class="control-label">Sense GPIO Pin</label>
+        <label class="control-label">Sensing GPIO Pin</label>
         <div class="controls">
-            <input type="text" class="input-mini" data-bind="value: settings.plugins.psucontrol.senseGPIOPin">
+            <input type="number" min="0" class="input-mini" data-bind="value: settings.plugins.psucontrol.senseGPIOPin"> 
+            <select data-bind="value: settings.plugins.psucontrol.senseGPIOPinPUD" class="input-medium">
+                <option value="">Float</option>
+                <option value="PULL_UP">Pull-Up</option>
+                <option value="PULL_DOWN">Pull-Down</option>
+            </select>
+            <input type="checkbox" data-bind="checked: settings.plugins.psucontrol.invertsenseGPIOPin"> Invert
+        </div>
+    </div>
+    <!-- /ko -->
+    <!-- ko if: settings.plugins.psucontrol.sensingMethod() === "SYSTEM" -->
+    <div class="control-group">
+        <label class="control-label">Sensing System Command</label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: settings.plugins.psucontrol.senseSystemCommand">
         </div>
     </div>
     <!-- /ko -->
@@ -88,6 +127,15 @@
         </div>
     </div>
     <!-- /ko -->
+    <div class="control-group">
+        <label class="control-label">Post On Delay</label>
+        <div class="controls">
+            <div class="input-append">
+                <input type="number" min="0" step="0.1" class="input-mini text-right" data-bind="value: settings.plugins.psucontrol.postOnDelay">
+                <span class="add-on">sec</span>
+            </div>
+        </div>
+    </div>  
     <br />
 
     <h4>Power Off Options</h4>
@@ -103,7 +151,7 @@
         <label class="control-label">Idle Timeout</label>
         <div class="controls">
             <div class="input-append">
-                <input type="number" class="input-mini text-right" data-bind="value: settings.plugins.psucontrol.idleTimeout">
+                <input type="number" min="0" class="input-mini text-right" data-bind="value: settings.plugins.psucontrol.idleTimeout">
                 <span class="add-on">min</span>
             </div>
         </div>
@@ -118,11 +166,17 @@
         <label class="control-label">Wait For Temperature</label>
         <div class="controls">
             <div class="input-append">
-                <input type="number" class="input-mini text-right" data-bind="value: settings.plugins.psucontrol.idleTimeoutWaitTemp">
+                <input type="number" min="0" class="input-mini text-right" data-bind="value: settings.plugins.psucontrol.idleTimeoutWaitTemp">
                 <span class="add-on">°C</span>
             </div>
         </div>
     </div>
     <!-- /ko -->
-
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+            <input type="checkbox" data-bind="checked: settings.plugins.psucontrol.disconnectOnPowerOff"> Disconnect on power off.
+            </label>
+        </div>
+    </div>
 </form>
