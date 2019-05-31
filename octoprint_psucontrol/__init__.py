@@ -541,14 +541,14 @@ class PSUControl(octoprint.plugin.StartupPlugin,
                 except (RuntimeError, ValueError) as e:
                     self._logger.error(e)
 
-                self._logger.debug("Switching Light On Using GPIO: %s" % self.pin_output_light)
-                if not self.invertonoffGPIOPin:
+                self._logger.debug("Switching Light On Using GPIO: %s" % self.onoffLightPin)
+                if not self.invertonoffLightPin:
                     pin_output_light = GPIO.HIGH
                 else:
                     pin_output_light = GPIO.LOW
 
                 try:
-                    GPIO.output(self._gpio_get_pin(self.pin_output_light), pin_output_light)
+                    GPIO.output(self._gpio_get_pin(self.onoffLightPin), pin_output_light)
                 except (RuntimeError, ValueError) as e:
                     self._logger.error(e)
 
@@ -589,14 +589,14 @@ class PSUControl(octoprint.plugin.StartupPlugin,
                 except (RuntimeError, ValueError) as e:
                     self._logger.error(e)
 
-                self._logger.debug("Switching Light Off Using GPIO: %s" % self.onoffGPIOPin)
+                self._logger.debug("Switching Light Off Using GPIO: %s" % self.onoffLightPin)
                 if not self.invertonoffLightPin:
                     pin_output_light = GPIO.LOW
                 else:
                     pin_output_light = GPIO.HIGH
 
                 try:
-                    GPIO.output(self._gpio_get_pin(self.pin_output_light), pin_output_light)
+                    GPIO.output(self._gpio_get_pin(self.onoffLightPin), pin_output_light)
                 except (RuntimeError, ValueError) as e:
                     self._logger.error(e)
 
@@ -639,6 +639,8 @@ class PSUControl(octoprint.plugin.StartupPlugin,
             switchingMethod='GCODE',
             onoffGPIOPin=0,
             invertonoffGPIOPin=False,
+            onoffLightPin=0,
+            invertonoffLightPin=False,
             onGCodeCommand='M80',
             offGCodeCommand='M81',
             onSysCommand='',
